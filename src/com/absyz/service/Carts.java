@@ -41,13 +41,35 @@ public class Carts {
 			psInsert.setInt(2, intUserId);
 			psInsert.setInt(3, intProductId);
 			psInsert.executeUpdate();
-			strOutput = "Record Inserted";
+			strOutput = "success";
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			strOutput = "Record Not Inserted";
+			strOutput = "failure";
 			e.printStackTrace();
 		}
 		System.out.println(strOutput);
+		return strOutput;
+	}
+	
+	public static String my_cart_list(HttpServletRequest request)
+	{
+		String strOutput="";
+		int intUserId = Integer.parseInt(request.getParameter("userid"));
+		Connection conn = null;
+		Statement stSelectCarts = null;
+		ResultSet rsSelectCarts = null;
+		try {
+			//String strQuery = "Select * from carts where userid = "+intUserId;
+			String strQuery = "Select c.cartid,c.userid,c.productid,p.productname,p.price from carts c "
+					+ "join products p on c.productid = p.productid where userid = "+intUserId;
+			conn = DbConnection.getConnection();
+			stSelectCarts = conn.createStatement();
+			rsSelectCarts = stSelectCarts.executeQuery(strQuery);
+			strOutput = Orders.convertResultSetToJson(rsSelectCarts);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return strOutput;
 	}
 

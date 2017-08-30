@@ -3,11 +3,16 @@ package com.absyz.service;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.absyz.core.DbConnection;
 
@@ -47,14 +52,14 @@ public class Orders {
 			psInsert.setInt(3, intProductId);
 			psInsert.setInt(4, intShippingId);
 			psInsert.setInt(5, intQuantity);
-			psInsert.setDouble(6, intProductId);
+			psInsert.setDouble(6, dblAmount);
 			psInsert.setTimestamp(7, timestamp);
 			
 			psInsert.executeUpdate();
-			strOutput = "Record Inserted";
+			strOutput = "success";
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			strOutput = "Record Not Inserted";
+			strOutput = "failure";
 			e.printStackTrace();
 		}
 		System.out.println(strOutput);
@@ -67,7 +72,44 @@ public class Orders {
 		int intUserId = Integer.parseInt(request.getParameter("userid"));
 		Connection conn = null;
 		Statement stSelectOrders = null;
-		
+		ResultSet rsSelectOrders = null;
+		try {
+			//String strQuery = "Select * from orders where userid = "+intUserId;
+			String strQuery = "Select o.orderid,o.userid,o.productid,o.orderdate,o.productquantity,o.totalamount,p.productname from orders o "
+					+ "join products p on o.productid = p.productid where o.userid = "+intUserId;
+			conn = DbConnection.getConnection();
+			stSelectOrders = conn.createStatement();
+			rsSelectOrders = stSelectOrders.executeQuery(strQuery);
+			strOutput = convertResultSetToJson(rsSelectOrders);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return strOutput;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static String convertResultSetToJson(ResultSet resultSet) throws SQLException
+	{
+	    JSONArray json = new JSONArray();
+	    ResultSetMetaData metadata = resultSet.getMetaData();
+	    int numColumns = metadata.getColumnCount();
+
+	    try {
+			while(resultSet.next())             //iterate rows
+			{
+			    JSONObject obj = new JSONObject();      //extends HashMap
+			    for (int i = 1; i <= numColumns; ++i)           //iterate columns
+			    {
+			        String column_name = metadata.getColumnName(i);
+			        obj.put(column_name, resultSet.getObject(column_name));
+			    }
+			    json.put(obj);
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    return json.toString();
 	}
 }

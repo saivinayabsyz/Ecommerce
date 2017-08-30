@@ -7,7 +7,7 @@
       
     <servlet-mapping>  
     <servlet-name>EcommerceServlet</servlet-name>  
-    <url-pattern>/EcommerceServlet</url-pattern>  
+    <url-pattern>/Ecommerce</url-pattern>  
     </servlet-mapping>  
       
     </web-app>  

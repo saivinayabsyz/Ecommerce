@@ -12,7 +12,7 @@ import com.absyz.core.DbConnection;
 
 public class Products {
 	
-	public static String add_produts(HttpServletRequest request)
+	public static String add_products(HttpServletRequest request)
 	{
 		Connection conn =null;
 		PreparedStatement psInsert = null;
@@ -53,7 +53,7 @@ public class Products {
 				psInsert.setDouble(5, dblPrice);
 				
 				psInsert.executeUpdate();
-				strOutput = "Record Inserted";
+				strOutput = "success";
 				
 //			}
 //			else
@@ -62,10 +62,30 @@ public class Products {
 //			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			strOutput = "Record Not Inserted";
+			strOutput = "failure";
 			e.printStackTrace();
 		}
 		System.out.println(strOutput);
+		return strOutput;
+	}
+	
+	public static String show_products(HttpServletRequest request)
+	{
+		String strOutput="";
+		Connection conn=null;
+		Statement stGetProducts;
+		ResultSet rsGetProducts;
+		String strQuery = "Select * from products where stock >= 1";
+		try {
+			conn = DbConnection.getConnection();
+			stGetProducts = conn.createStatement();
+			rsGetProducts = stGetProducts.executeQuery(strQuery);
+			strOutput = Orders.convertResultSetToJson(rsGetProducts);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return strOutput;
 	}
 

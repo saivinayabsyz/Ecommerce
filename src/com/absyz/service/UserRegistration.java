@@ -3,6 +3,10 @@ package com.absyz.service;
 import java.io.*;
 import javax.servlet.http.*;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.absyz.core.DbConnection;
 
 import java.sql.*;
@@ -18,12 +22,20 @@ public class UserRegistration {
 		String strQuery = "Select * from users where email = '"+strEmail+"'";
 		System.out.println(strQuery);
 		String strOutput="";
+		JSONArray json = new JSONArray();
+		JSONObject obj = new JSONObject();
 		try {
 			conn = DbConnection.getConnection();
 			stSelectQuery = conn.createStatement();
 			rsUserReg = stSelectQuery.executeQuery(strQuery);
+			System.out.println(rsUserReg.toString());
+			if(rsUserReg.next())
+			{
+				System.out.println(rsUserReg.getString("firstname"));
+			}
 			if(!rsUserReg.next())
 			{
+				System.out.println("Inside");
 				String strFname = request.getParameter("fname");
 				String strlname = request.getParameter("lname");
 				String strAddress1 = request.getParameter("address1");
@@ -31,10 +43,10 @@ public class UserRegistration {
 				String strCity = request.getParameter("city");
 				String strState = request.getParameter("state");
 				String strCountry = request.getParameter("country");
-				String strZipcode = request.getParameter("zipcde");
+				String strZipcode = request.getParameter("zipcode");
 				String strMobile = request.getParameter("mobile");
 				String strPassword = request.getParameter("password");
-				String strUsername = request.getParameter("username");
+				//String strUsername = request.getParameter("ema");
 				//String strDob = request.getParameter("dob");
 				String strGender = request.getParameter("gender");
 				psInsert = conn.prepareStatement("Insert into users(username,firstname,lastname,email,password,mobile,address1,address2,city,state,country,"
@@ -53,21 +65,36 @@ public class UserRegistration {
 				psInsert.setString(12, strZipcode);
 				psInsert.setString(13, strGender);
 				psInsert.setString(14, "active");
+				System.out.println(psInsert.toString());
 				psInsert.executeUpdate();
-				strOutput = "Record Inserted";
+				obj.put("success","success");
 				
 			}
 			else
 			{
-				strOutput = "User Already Exists";
+				System.out.println("Inside else part");
+				obj.put("success","faliure");
+				obj.put("message", "User Already Available");
+				
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			strOutput = "Record Not Inserted";
+			try {
+				obj.put("success","faliure");
+				obj.put("message", "Check All input parameters");
+			} catch (JSONException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println(strOutput);
-		return strOutput;
+		json.put(obj);
+		System.out.println(json.toString());
+		return json.toString();
 	}
 	
 	public static String add_shipping_address(HttpServletRequest request)
@@ -81,6 +108,7 @@ public class UserRegistration {
 		System.out.println(strQuery);
 		String strOutput="";
 		int intShippingId =0;
+	 
 		try {
 			conn = DbConnection.getConnection();
 			stSelectQuery = conn.createStatement();
