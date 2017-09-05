@@ -8,6 +8,10 @@ import java.sql.Statement;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.absyz.core.DbConnection;
 
 public class Products {
@@ -76,17 +80,55 @@ public class Products {
 		Statement stGetProducts;
 		ResultSet rsGetProducts;
 		String strQuery = "Select * from products where stock >= 1";
+		JSONArray json = new JSONArray();
+		JSONObject obj=null;
 		try {
 			conn = DbConnection.getConnection();
 			stGetProducts = conn.createStatement();
 			rsGetProducts = stGetProducts.executeQuery(strQuery);
-			strOutput = Orders.convertResultSetToJson(rsGetProducts);
+			//strOutput = Orders.convertResultSetToJson(rsGetProducts);
+			obj = new JSONObject();      //extends HashMap
+		    obj.put("success",JsonObjects.json_objects("success","products data available"));
+		    obj.put("data",JsonObjects.convertResultSetToJson(rsGetProducts));
+		    json.put(obj);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		
-		return strOutput;
+		System.out.println(obj);
+		return json.toString();
+	}
+	
+	public static String show_productinfo(HttpServletRequest request)
+	{
+		String strOutput="";
+		Connection conn=null;
+		Statement stGetProducts;
+		ResultSet rsGetProducts;
+		int intProductid = Integer.parseInt(request.getParameter("prodid"));
+		String strQuery = "Select * from products where productid = "+intProductid;
+		JSONArray json = new JSONArray();
+		JSONObject obj=null;
+		try {
+			conn = DbConnection.getConnection();
+			stGetProducts = conn.createStatement();
+			rsGetProducts = stGetProducts.executeQuery(strQuery);
+			obj = new JSONObject();      //extends HashMap
+		    obj.put("success",JsonObjects.json_objects("success","products data available"));
+		    obj.put("data",JsonObjects.convertResultSetToJson(rsGetProducts));
+		    json.put(obj);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println(obj);
+		return json.toString();
 	}
 
 }

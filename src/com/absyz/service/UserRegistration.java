@@ -17,11 +17,15 @@ public class UserRegistration {
 		Connection conn =null;
 		PreparedStatement psInsert = null;
 		ResultSet rsUserReg = null;
+		ResultSet rsUserMax = null;
 		Statement stSelectQuery = null;
+		Statement stSelectMax = null;
 		String strEmail = request.getParameter("email");
 		String strQuery = "Select * from users where email = '"+strEmail+"'";
+		String strUserQuery = "Select max(userid) userid from users";
 		System.out.println(strQuery);
 		String strOutput="";
+		int intUserId=0;
 		JSONArray json = new JSONArray();
 		JSONObject obj = new JSONObject();
 		try {
@@ -31,10 +35,17 @@ public class UserRegistration {
 			System.out.println(rsUserReg.toString());
 			if(rsUserReg.next())
 			{
+				
 				System.out.println(rsUserReg.getString("firstname"));
 			}
 			if(!rsUserReg.next())
 			{
+				stSelectMax = conn.createStatement();
+				rsUserMax = stSelectMax.executeQuery(strUserQuery);
+				if(rsUserMax.next())
+				{
+					intUserId = rsUserMax.getInt("userid")+1;
+				}
 				System.out.println("Inside");
 				String strFname = request.getParameter("fname");
 				String strlname = request.getParameter("lname");
@@ -50,7 +61,7 @@ public class UserRegistration {
 				//String strDob = request.getParameter("dob");
 				String strGender = request.getParameter("gender");
 				psInsert = conn.prepareStatement("Insert into users(username,firstname,lastname,email,password,mobile,address1,address2,city,state,country,"
-						+ "zipcode,gender,status) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+						+ "zipcode,gender,status,userid) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 				psInsert.setString(1, strEmail);
 				psInsert.setString(2, strFname);
 				psInsert.setString(3, strlname);
@@ -65,22 +76,22 @@ public class UserRegistration {
 				psInsert.setString(12, strZipcode);
 				psInsert.setString(13, strGender);
 				psInsert.setString(14, "active");
+				psInsert.setInt(15, intUserId);
 				System.out.println(psInsert.toString());
 				psInsert.executeUpdate();
 				obj.put("success","success");
-				
 			}
 			else
 			{
 				System.out.println("Inside else part");
-				obj.put("success","faliure");
+				obj.put("success","failure");
 				obj.put("message", "User Already Available");
 				
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			try {
-				obj.put("success","faliure");
+				obj.put("success","failure");
 				obj.put("message", "Check All input parameters");
 			} catch (JSONException e1) {
 				// TODO Auto-generated catch block
@@ -96,7 +107,34 @@ public class UserRegistration {
 		System.out.println(json.toString());
 		return json.toString();
 	}
-	
+	public static String change_password(HttpServletRequest request)
+	{
+		Connection conn =null;
+		PreparedStatement psUpdate = null;
+		String strUpdate="";
+		String strPwd = request.getParameter("pwd");
+		int intUserid = Integer.parseInt(request.getParameter("userid"));
+		JSONArray json = new JSONArray();
+		JSONObject obj = new JSONObject();
+		conn = DbConnection.getConnection();
+		strUpdate = "Update users set password = '"+strPwd+"' where userid = "+intUserid;
+		try {
+			psUpdate = conn.prepareStatement(strUpdate);
+			psUpdate.executeUpdate();
+			obj.put("success","success");
+		
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		json.put(obj);
+		System.out.println(json.toString());
+		return json.toString();
+		
+	}
 	public static String add_shipping_address(HttpServletRequest request)
 	{
 		Connection conn =null;

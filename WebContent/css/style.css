@@ -16,14 +16,32 @@ width: 300px;
 }
 .loginh {
 margin: 20px auto;
-width: 500px;
+width: 800px;
 background-color: #FFF;
 padding: 20px;
 border-radius: 5px
 }
-.reg {
+.prdtable {
+margin: 20px auto;
+width: 700px;
+background-color: #FFF;
+padding: 20px;
+border-radius: 5px
+}
+.prdn {
 margin: 20px auto;
 width: 400px;
+background-color: #FFF;
+padding: 20px;
+border-radius: 5px;
+vertical-align: top;
+position:absolute;
+
+}
+.reg {
+width: 1000px;
+text-align: right;
+
 }
 .login-screen {
 background-color: #FFF;
@@ -43,7 +61,7 @@ text-align: center;
 margin-bottom: 10px;
 }
 
-input {
+input1 {
 text-align: center;
 background-color: #ECF0F1;
 border: 2px solid transparent;

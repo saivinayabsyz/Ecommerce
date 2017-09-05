@@ -73,6 +73,8 @@ public class Orders {
 		Connection conn = null;
 		Statement stSelectOrders = null;
 		ResultSet rsSelectOrders = null;
+		JSONArray json = new JSONArray();
+		JSONObject obj=null;
 		try {
 			//String strQuery = "Select * from orders where userid = "+intUserId;
 			String strQuery = "Select o.orderid,o.userid,o.productid,o.orderdate,o.productquantity,o.totalamount,p.productname from orders o "
@@ -80,36 +82,20 @@ public class Orders {
 			conn = DbConnection.getConnection();
 			stSelectOrders = conn.createStatement();
 			rsSelectOrders = stSelectOrders.executeQuery(strQuery);
-			strOutput = convertResultSetToJson(rsSelectOrders);
+			//strOutput = convertResultSetToJson(rsSelectOrders);
+			obj = new JSONObject();      //extends HashMap
+		    obj.put("success",JsonObjects.json_objects("success","products data available"));
+		    obj.put("data",JsonObjects.convertResultSetToJson(rsSelectOrders));
+		    json.put(obj);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		return strOutput;
-	}
-
-	@SuppressWarnings("unchecked")
-	public static String convertResultSetToJson(ResultSet resultSet) throws SQLException
-	{
-	    JSONArray json = new JSONArray();
-	    ResultSetMetaData metadata = resultSet.getMetaData();
-	    int numColumns = metadata.getColumnCount();
-
-	    try {
-			while(resultSet.next())             //iterate rows
-			{
-			    JSONObject obj = new JSONObject();      //extends HashMap
-			    for (int i = 1; i <= numColumns; ++i)           //iterate columns
-			    {
-			        String column_name = metadata.getColumnName(i);
-			        obj.put(column_name, resultSet.getObject(column_name));
-			    }
-			    json.put(obj);
-			}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	    return json.toString();
+		return json.toString();
 	}
+
+	
 }
