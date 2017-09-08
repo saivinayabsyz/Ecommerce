@@ -156,6 +156,14 @@ public class EcommerceServlet extends HttpServlet {
 				response.setHeader("Cache-Control", "no-cache");
 				response.getOutputStream().write(new String(strOutput.getBytes("UTF-8")).getBytes());
 		   }
+		   if (request.getParameter("serviceId").equals("deletecart"))
+		   {
+			   System.out.println("Inside delete block");
+			   String strOutput =Carts.remove_cart(request);
+			   response.setContentType("text/html");
+				response.setHeader("Cache-Control", "no-cache");
+				response.getOutputStream().write(new String(strOutput.getBytes("UTF-8")).getBytes());
+		   }
 		   if (request.getParameter("serviceId").equals("orders"))
 		   {
 			   String strOutput =Orders.new_order(request);
