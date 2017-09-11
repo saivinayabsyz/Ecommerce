@@ -37,8 +37,9 @@ $(document).ready(function() {
       <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+<div id="admindivlogout" style="align:right;cursor: pointer;">Logout</div>
 <form action = "UploadServlet" method = "post" enctype = "multipart/form-data">
-<div class="reg">
+<div class="login">
 
 	
 <table class="login-screen">
@@ -58,13 +59,10 @@ $(document).ready(function() {
 		<td>Product Price</td><td><input type="text" name="txtPrice" id="txtPrice" /></td>
 	</tr>
 	<tr>
-		<td>
+		<td colspan ="2">
 			Select a file to upload: <br /><input type = "file" name = "file" size = "50" /><br />
-			<input type = "submit" value = "Upload File" />
+			<input type = "submit" value = "Add Product" /><input type="hidden" id="hidid" value="" />
 		</td>
-	</tr>
-	<tr>
-		<td><input class ="btn" type="button" value="Add Product" id="addproduct" /></td><td><input class ="btn" type="button" value="Cancel" /></td>
 	</tr>
 </table>
 	

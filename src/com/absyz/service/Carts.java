@@ -99,6 +99,7 @@ public class Carts {
 		Connection conn = null;
 		Statement stSelectCarts = null;
 		ResultSet rsSelectCarts = null;
+		ResultSet rsSelectCarts1 = null;
 		JSONArray json = new JSONArray();
 		JSONObject obj=null;
 		try {
@@ -109,9 +110,19 @@ public class Carts {
 			stSelectCarts = conn.createStatement();
 			rsSelectCarts = stSelectCarts.executeQuery(strQuery);
 			obj = new JSONObject();      //extends HashMap
-		    obj.put("success",JsonObjects.json_objects("success","Cart data available"));
-		    obj.put("data",JsonObjects.convertResultSetToJson(rsSelectCarts));
-		    json.put(obj);
+			if(rsSelectCarts.next())
+			{
+				obj.put("success",JsonObjects.json_objects("success","Cart data available"));
+				rsSelectCarts1 = stSelectCarts.executeQuery(strQuery);
+			    obj.put("data",JsonObjects.convertResultSetToJson(rsSelectCarts1));
+			    json.put(obj);
+			}
+			else
+			{
+				obj.put("success",JsonObjects.json_objects("failure","No Cart data available"));
+			    json.put(obj);
+			}
+		    
 			//strOutput = Orders.convertResultSetToJson(rsSelectCarts);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -120,6 +131,7 @@ public class Carts {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		System.out.println(json.toString());
 		return json.toString();
 	}
 	
@@ -128,12 +140,20 @@ public class Carts {
 		System.out.println("inside remove cart function");
 		String strOutput="";
 		int intCartId = Integer.parseInt(request.getParameter("cartid"));
+		strOutput = remove_cart_data(intCartId);
+		strOutput = my_cart_list(request);
+		System.out.println(strOutput);
+		return strOutput;
+	}
+	public static String remove_cart_data(int intCartId)
+	{
 		Connection conn = null;
 		Statement stSelectCarts = null;
 		ResultSet rsSelectCarts = null;
 		PreparedStatement psDelete = null;
 		JSONArray json = new JSONArray();
 		JSONObject obj=null;
+		String strOutput="";
 		try {
 			String strQuery = "Select * from carts where cartid = "+intCartId;
 			conn = DbConnection.getConnection();
@@ -146,7 +166,7 @@ public class Carts {
 				psDelete.setInt(1, intCartId);
 				psDelete.executeUpdate();
 				System.out.println("Record Deleted");
-				strOutput = my_cart_list(request);
+				strOutput="success";
 			}
 			
 			//strOutput = Orders.convertResultSetToJson(rsSelectCarts);
@@ -154,7 +174,6 @@ public class Carts {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
-		System.out.println(strOutput);
 		return strOutput;
 	}
 

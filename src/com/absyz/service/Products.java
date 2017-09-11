@@ -183,5 +183,37 @@ public class Products {
 		System.out.println(obj);
 		return json.toString();
 	}
+	
+	public static String update_product(int intProductId,int intQuantity)
+	{
+		Connection conn=null;
+		ResultSet rsGetPrdQty = null;
+		Statement stGetPrdQty = null;
+		PreparedStatement psUpdatePrdQty = null;
+		String strGetQuery = "";
+		int intProdQuantity = 0;
+		int intUpdatePrdQty = 0;
+		strGetQuery = "Select stock from products where productid = "+intProductId;
+		try {
+			conn = DbConnection.getConnection();
+			stGetPrdQty = conn.createStatement();
+			rsGetPrdQty = stGetPrdQty.executeQuery(strGetQuery);
+			if(rsGetPrdQty.next())
+			{
+				intProdQuantity = rsGetPrdQty.getInt("stock");
+				intUpdatePrdQty = intProdQuantity - intQuantity;
+			}
+			psUpdatePrdQty = conn.prepareStatement("Update products set stock = ? where productid = ?");
+			psUpdatePrdQty.setInt(1, intUpdatePrdQty);
+			psUpdatePrdQty.setInt(2, intProductId);
+			psUpdatePrdQty.executeUpdate();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return "Mani";
+	}
 
 }

@@ -131,6 +131,7 @@ public class UploadServlet extends HttpServlet {
          }
          System.out.println(strPname+","+strBname+","+intCount+","+intPrice+","+strFilename);
          String strOutput = Products.add_products_withimage(strPname, strBname, strFilename, intCount, intPrice);
+         response.sendRedirect("addproduct.html");
          out.println("</body>");
          out.println("</html>");
          } catch(Exception ex) {

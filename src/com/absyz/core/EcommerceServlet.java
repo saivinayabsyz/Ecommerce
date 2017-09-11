@@ -134,6 +134,14 @@ public class EcommerceServlet extends HttpServlet {
 			      response.setHeader("Cache-Control", "no-cache");
 			      response.getOutputStream().write(new String(strOutput.getBytes("UTF-8")).getBytes());
 		   }
+		   if (request.getParameter("serviceId").equals("adminlogin"))
+		   {
+			   String strOutput = LoginService.adminLogin(request);
+			   	      
+			      response.setContentType("text/html");
+			      response.setHeader("Cache-Control", "no-cache");
+			      response.getOutputStream().write(new String(strOutput.getBytes("UTF-8")).getBytes());
+		   }
 		   if (request.getParameter("serviceId").equals("showuser"))
 		   {
 			   String strOutput = LoginService.show_user(request);
