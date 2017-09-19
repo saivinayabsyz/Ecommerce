@@ -49,7 +49,8 @@ public class LoginService {
 			else
 			{
 				obj = new JSONObject();      //extends HashMap
-			    obj.put("success",JsonObjects.json_objects("failure","user data not available"));
+			    obj.put("success",JsonObjects.json_objects("failure","Invalid Login Credentails"));
+			    obj.put("data",JsonObjects.json_objects("failure","Invalid Login Credentails"));
 			    json.put(obj);
 			}
 		}
@@ -57,6 +58,7 @@ public class LoginService {
 					// TODO Auto-generated catch block
 				 	obj = new JSONObject();      //extends HashMap
 				    obj.put("success",JsonObjects.json_objects("failure","Data Connection Lost. Please Try again after sometime"));
+				    obj.put("data",JsonObjects.json_objects("failure","Data Connection Lost. Please Try again after sometime"));
 				    json.put(obj);
 					strOutput = "Data Connection Lost. Please Try again after sometime";
 					e.printStackTrace();
@@ -102,7 +104,8 @@ public class LoginService {
 			else
 			{
 				obj = new JSONObject();      //extends HashMap
-			    obj.put("success",JsonObjects.json_objects("failure","user data not available"));
+			    obj.put("success",JsonObjects.json_objects("failure","Invalid Login Credentails"));
+			    obj.put("data",JsonObjects.json_objects("failure","Invalid Login Credentails"));
 			    json.put(obj);
 			}
 		}
@@ -110,6 +113,7 @@ public class LoginService {
 					// TODO Auto-generated catch block
 				 	obj = new JSONObject();      //extends HashMap
 				    obj.put("success",JsonObjects.json_objects("failure","Data Connection Lost. Please Try again after sometime"));
+				    obj.put("data",JsonObjects.json_objects("failure","Data Connection Lost. Please Try again after sometime"));
 				    json.put(obj);
 					strOutput = "Data Connection Lost. Please Try again after sometime";
 					e.printStackTrace();
