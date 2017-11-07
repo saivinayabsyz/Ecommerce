@@ -186,7 +186,7 @@ $(document).on("click", "#td_myorders", function() {
 			//alert(obj.length);
 			//alert(obj[0].data.length);
 			//alert(obj[0].data[0].productname);
-			var orderTable="<table width='100%'><tr class='tbl_header'><td>Order No</td><td>Product Name</td><td>Price</td><td>Date</td><td>Quantity</td><td>Amount</td>";
+			var orderTable="<table width='100%' class='table table-bordered'><tr class='tbl_header'><td>Order No</td><td>Product Name</td><td>Price</td><td>Date</td><td>Quantity</td><td>Amount</td>";
 			for(var i=0;i<obj[0].data.length;i++)
 			{
 				if(i%2 == 0)
@@ -202,8 +202,8 @@ $(document).on("click", "#td_myorders", function() {
 				
 				}
 			orderTable = orderTable + "</table>";
-			$('#my_orders').empty();
-			$('#my_orders').append(orderTable);
+			$('#menu2').empty();
+			$('#menu2').append(orderTable);
 								
 		}
 	});
@@ -311,7 +311,7 @@ function loadProducts()
 			//alert(responseText);
 			//alert(obj[0].data.length);
 			//alert(obj[0].data[0].productname);
-			var productTable="<table class='prdtable' width='100%'><tr class='tbl_header' style='height:30px;'><td>Select</td><td>Brand</td><td>Product Name</td><td> Price</td></tr>";
+			var productTable="<table class='table table-bordered' width='100%'><tr class='tbl_header' style='height:30px;'><td>Select</td><td>Brand</td><td>Product Name</td><td> Price</td></tr>";
 			for(var i=0;i<obj[0].data.length;i++)
 			{
 				var pr_id = "pr_"+obj[0].data[i].productid;
@@ -424,7 +424,7 @@ $(document).on("click", "#td_mycarts", function() {
 				//alert(obj.length);
 				//alert(obj[0].data.length);
 				//alert(obj[0].data[0].productname);
-				var cartTable="<table width='100%' border='1'><tr class='tbl_header'><td colspan='5'>My Carts Info</td></tr><tr class='tbl_header'><td>Select</td><td>Product Name</td><td>Quantity</td><td>Amount</td><td>Remove Item</td></tr>";
+				var cartTable="<table width='100%' border='1' class='table table-bordered'><tr class='tbl_header'><td colspan='5'>My Carts Info</td></tr><tr class='tbl_header'><td>Select</td><td>Product Name</td><td>Quantity</td><td>Amount</td><td>Remove Item</td></tr>";
 				for(var i=0;i<obj[0].data.length;i++)
 				{
 					var qty_id = "qty_"+ obj[0].data[i].productid;

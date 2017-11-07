@@ -1,5 +1,10 @@
 package com.absyz.service;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,7 +21,7 @@ import com.absyz.core.DbConnection;
 
 public class Products {
 	
-	public static String add_products_withimage(String strPname,String strBname, String strFilename,int intCount,int intPrice)
+	public static String add_products_withimage(String strPname,String strBname, String strFilename,int intCount,int intPrice,File file) throws FileNotFoundException
 	{
 		Connection conn =null;
 		PreparedStatement psInsert = null;
@@ -28,6 +33,7 @@ public class Products {
 		System.out.println(strQuery);
 		String strOutput="";
 		int intProductId = 0;
+		FileInputStream fis = new FileInputStream(file);
 		try {
 			conn = DbConnection.getConnection();
 			stSelectQuery = conn.createStatement();
@@ -45,14 +51,16 @@ public class Products {
 				{
 					intProductId = 100;
 				}
-				psInsert = conn.prepareStatement("Insert into products(productid,productname,stock,brandname,price,filename)values(?,?,?,?,?,?)");
+				psInsert = conn.prepareStatement("Insert into products(productid,productname,stock,brandname,price,filename,img)values(?,?,?,?,?,?,?)");
 				psInsert.setInt(1, intProductId);
 				psInsert.setString(2, strPname);
 				psInsert.setInt(3, intCount);
 				psInsert.setString(4, strBname);
 				psInsert.setDouble(5, intPrice);
 				psInsert.setString(6, strFilename);
+				psInsert.setBinaryStream(7, fis, (int)file.length());
 				psInsert.executeUpdate();
+				fis.close();
 				strOutput = "success";
 				
 //			}
@@ -63,6 +71,9 @@ public class Products {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			strOutput = "failure";
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		System.out.println(strOutput);
@@ -131,23 +142,53 @@ public class Products {
 		String strOutput="";
 		Connection conn=null;
 		Statement stGetProducts;
+		Statement stGetProductsWOI;
 		ResultSet rsGetProducts;
-		String strQuery = "Select * from products where stock >= 1";
+		ResultSet rsGetProductsWOI;
+		String strQuery = "Select * from products where stock >= 1 and img is not null";
+		String strQueryWOI = "Select stock,productname,productid,price,brandname,filename,description from products where stock >= 1 and img is not null";
 		JSONArray json = new JSONArray();
 		JSONObject obj=null;
 		try {
 			conn = DbConnection.getConnection();
 			stGetProducts = conn.createStatement();
+			stGetProductsWOI = conn.createStatement();
 			rsGetProducts = stGetProducts.executeQuery(strQuery);
+			rsGetProductsWOI = stGetProductsWOI.executeQuery(strQueryWOI);
 			//strOutput = Orders.convertResultSetToJson(rsGetProducts);
+			
+			//Downloading img
+			InputStream in = null;
+			if(rsGetProducts.next())
+			{
+				String len1 = rsGetProducts.getString("img");
+				int len = len1.length();
+				byte [] b = new byte[len];
+				in = rsGetProducts.getBinaryStream("img");
+				int index = in.read(b, 0, len);
+				OutputStream outImej = new FileOutputStream("E:\\Absyz_Workspace\\Ecommerce\\Webcontent\\downloads\\"+rsGetProducts.getString("filename"));
+				while (index != -1)
+				{
+				outImej.write(b, 0, index);
+				index = in.read(b, 0, len);
+				System.out.println("==========================");
+				System.out.println(index);
+				System.out.println(outImej);
+				System.out.println("==========================");
+			}
+			
+			}
 			obj = new JSONObject();      //extends HashMap
 		    obj.put("success",JsonObjects.json_objects("success","products data available"));
-		    obj.put("data",JsonObjects.convertResultSetToJson(rsGetProducts));
+		    obj.put("data",JsonObjects.convertResultSetToJson(rsGetProductsWOI));
 		    json.put(obj);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

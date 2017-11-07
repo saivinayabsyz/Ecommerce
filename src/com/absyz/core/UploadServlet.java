@@ -86,7 +86,7 @@ public class UploadServlet extends HttpServlet {
          out.println("<title>Servlet upload</title>");  
          out.println("</head>");
          out.println("<body>");
-   
+         File file = null;
          while ( i.hasNext () ) 
          {
             FileItem fi = (FileItem)i.next();
@@ -105,9 +105,9 @@ public class UploadServlet extends HttpServlet {
 //               } else {
 //                  file = new File( filePath + fileName.substring(fileName.lastIndexOf("\\")+1)) ;
 //               }
-            System.out.println(absoluteDiskPath);
-            System.out.println(filePath);
-               File file = new File(filePath, fileName);
+            System.out.println("Absolute Path : " +absoluteDiskPath);
+            System.out.println("Filepath : " +filePath);
+               file = new File(filePath, fileName);
                strFilename = fileName;
                fi.write( file ) ;
                out.println("Uploaded Filename: " + fileName + "<br>");
@@ -130,7 +130,7 @@ public class UploadServlet extends HttpServlet {
           	}
          }
          System.out.println(strPname+","+strBname+","+intCount+","+intPrice+","+strFilename);
-         String strOutput = Products.add_products_withimage(strPname, strBname, strFilename, intCount, intPrice);
+         String strOutput = Products.add_products_withimage(strPname, strBname, strFilename, intCount, intPrice,file);
          response.sendRedirect("addproduct.html");
          out.println("</body>");
          out.println("</html>");
