@@ -395,7 +395,7 @@ function showuserinfo()
 								
 				usertable = usertable + "<tr><td colspan='4' align='center'><input type='button' id='btnBack' value='Back' /><input type='button' id='btnChngPwd' value='Change Password' /></td></tr></table>";
 				$('#menu5').empty();
-				$('#menu5').append(usertable);
+				//$('#menu5').append(usertable);
 				$('#hidid').val(userid);
 			}
 			else{
