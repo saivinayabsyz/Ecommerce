@@ -18,14 +18,16 @@
   
   <ul class="nav nav-tabs">
     <li class="active"><a href="#home"><b><u>Home</u></b></a></li>
+	<li><a href="#menu5"><b><u onclick="showuserinfo()">User Info</u></b></a></li>
     <li><a href="#menu1"><b><u onclick="loadProducts()">Products</u></b></a></li>
     <li><a href="#menu2"><b><u id="td_myorders">My Orders</u></b></a></li>
     
-    <li><a href="#menu3"><b><u id="td_mycarts">My Cart</u></b></a></li>
+    <li  class="pull-right"><a href="#menu3"><b><u id="td_mycarts">My Cart</u></b></a></li>
 <!--     <li><a href="#menu4"><b><u>All Products</u></b></a></li> -->
-    <li><a href="#menu5"><b><u onclick="showuserinfo()">User Info</u></b></a></li>
+    
     <li><a href="#menu6"><b><u id="divlogout">Logout</u></b></a></li><input type="hidden" id="hidid" value="" /><input type="hidden" id="hidPrdId" value="" />
   </ul>
+  
 <br/>
     <br/>
     <br/>
@@ -56,7 +58,7 @@
         <div id="collapse1" class="panel-collapse collapse">
         <div class="panel-body"><div class="panel panel-primary">
       <div class="panel-body">
-        <label>Product Name: </label><br/>
+      <div id="showPrdName"> <label>Product Name: </label><br/></div>
         <label>Brand: </label><br/>
         <label>Description:</label></br/>
         <form>
@@ -75,40 +77,37 @@
       
       
       
-  <div id="menu2" class="tab-pane fade">
-<!--       <h3>Display cart table here</h3> -->
-<!--       <p>cart table</p> -->
-    </div>
+ 
     
     
-<!--     <div id="menu2" class="tab-pane fade"> -->
-<!--       <div class="container" id="my_orders"> -->
-<!-- <!--   <h2>Implement  order Table here and click for description on each item</h2> --> -->
+    <div id="menu2" class="tab-pane fade">
+      <div class="container" id="my_orders">
+<!--   <h2>Implement  order Table here and click for description on each item</h2> -->
   
-<!--   <div class="panel-group"> -->
-<!--     <div class="panel panel-primary"> -->
+  <div class="panel-group">
+    <div class="panel panel-primary">
       
-<!--       <div class="panel-heading"> -->
-<!--         <h4 class="panel-title"> -->
-<!--           <a data-toggle="collapse" href="#collapse1">Click for description</a> -->
-<!--         </h4> -->
-<!--         </div> -->
-<!--         <div id="collapse1" class="panel-collapse collapse"> -->
-<!--         <div class="panel-body"><div class="panel panel-primary"> -->
-<!--       <div class="panel-body"> -->
-<!--         <label>Product Name: </label><br/> -->
-<!--         <label>Brand: </label><br/> -->
-<!--         <label>Description:</label></br/> -->
-<!--         <form> -->
-<!--           <div class="form-group"> -->
-<!--   <label for="usr">Count:</label> -->
-<!--   <input type="text" class="form-control" id="usr"> -->
-<!-- </div> -->
-<!--   </form> -->
-<!-- </div> -->
-<!-- </div></div> -->
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" href="#collapse1">Click for description</a>
+        </h4>
+        </div>
+        <div id="collapse1" class="panel-collapse collapse">
+        <div class="panel-body"><div class="panel panel-primary">
+      <div class="panel-body">
+        <label>Product Name: </label><br/>
+        <label>Brand: </label><br/>
+        <label>Description:</label></br/>
+        <form>
+          <div class="form-group">
+  <label for="usr">Count:</label>
+  <input type="text" class="form-control" id="usr">
+</div>
+  </form>
+</div>
+</div></div>
         
-<!--         </div></div></div></div></div> -->
+        </div></div></div></div></div>
    
    
     
